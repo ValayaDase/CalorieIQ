@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalorieIQ | Model Information & Performance Metrics</title>
+    <meta name="description" content="Machine learning model information, confusion metrics (TP, TN, FP, FN) and performance scores for CalorieIQ models.">
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- GLOBAL NAVBAR -->
+        <header class="main-navbar">
+            <a href="index.html" class="navbar-brand">
+                <div class="brand-badge-icon">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                </div>
+                <div class="brand-title">Calorie<span class="accent">IQ</span><span class="brand-version">v2.0</span></div>
+            </a>
+
+            <!-- Two Separate Page Navigation Links -->
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link" id="navDashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Prediction Dashboard</span>
+                </a>
+                <a href="models.html" class="nav-link active" id="navModels">
+                    <i class="fa-solid fa-microchip"></i>
+                    <span>Model Information</span>
+                </a>
+            </nav>
+
+            <div class="status-pill" id="backendStatusPill" title="Connection status with Python API">
+                <span class="status-dot"></span>
+                <span id="backendStatusLabel">Backend Online</span>
+            </div>
+        </header>
+
+        <!-- MODEL HERO BANNER -->
+        <section class="model-hero-banner">
+            <span class="section-label"><i class="fa-solid fa-chart-line"></i> Model Intelligence</span>
+            <h2>Machine Learning Models Evaluation & Confusion Metrics</h2>
+            <p>Direct evaluation scores and confusion metrics (True Positive, True Negative, False Positive, False Negative) for both trained CalorieIQ models.</p>
+        </section>
+
+        <!-- DUAL MODELS SHOWCASE GRID -->
+        <section class="models-showcase-grid">
+            <!-- ============================================ -->
+            <!-- MODEL 1: FOOD CALORIE MODEL                  -->
+            <!-- ============================================ -->
+            <div class="model-profile-card" id="foodModelCard">
+                <div class="model-profile-header">
+                    <div>
+                        <h3>Food Calorie Prediction Model</h3>
+                        <p>Dataset: <code>food_calorie_prediction_dataset.csv</code> (1,500 samples)</p>
+                    </div>
+                    <span class="algorithm-tag">Linear Regression</span>
+                </div>
+
+                <!-- 1. PERFORMANCE METRICS SCORES -->
+                <div>
+                    <div class="scores-section-title">
+                        <i class="fa-solid fa-award" style="color: var(--color-food-dark);"></i>
+                        <span>Performance Metrics Scores</span>
+                    </div>
+                    <div class="scores-grid">
+                        <div class="score-box">
+                            <div class="score-label">Accuracy</div>
+                            <div class="score-val" id="foodAccScore" style="color: #059669;">98.33%</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">Precision</div>
+                            <div class="score-val" id="foodPrecScore">0.9866</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">Recall</div>
+                            <div class="score-val" id="foodRecScore">0.9800</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">F1-Score</div>
+                            <div class="score-val" id="foodF1Score">0.9833</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">R² Score</div>
+                            <div class="score-val" id="foodR2Score" style="color: var(--color-primary);">0.9951</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">MAE</div>
+                            <div class="score-val" id="foodMaeScore">5.64 <small style="font-size:12px; font-weight:normal;">kcal</small></div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">RMSE</div>
+                            <div class="score-val" id="foodRmseScore">7.16 <small style="font-size:12px; font-weight:normal;">kcal</small></div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">MSE</div>
+                            <div class="score-val" id="foodMseScore">51.32</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. CONFUSION METRICS (TP, TN, FP, FN) -->
+                <div class="confusion-metrics-section">
+                    <div class="scores-section-title">
+                        <i class="fa-solid fa-table-cells" style="color: var(--color-primary);"></i>
+                        <span>Confusion Metrics (TP, TN, FP, FN)</span>
+                    </div>
+
+                    <div class="matrix-2x2-grid">
+                        <!-- True Positive (TP) -->
+                        <div class="matrix-quadrant tp">
+                            <div class="quadrant-top">
+                                <span class="quadrant-tag">True Positive (TP)</span>
+                                <span class="quadrant-meaning">Actual High & Pred High</span>
+                            </div>
+                            <div class="quadrant-num" id="foodTP">147</div>
+                        </div>
+
+                        <!-- False Positive (FP) -->
+                        <div class="matrix-quadrant fp">
+                            <div class="quadrant-top">
+                                <span class="quadrant-tag">False Positive (FP)</span>
+                                <span class="quadrant-meaning">Actual Normal & Pred High</span>
+                            </div>
+                            <div class="quadrant-num" id="foodFP">2</div>
+                        </div>
+
+                        <!-- False Negative (FN) -->
+                        <div class="matrix-quadrant fn">
+                            <div class="quadrant-top">
+                                <span class="quadrant-tag">False Negative (FN)</span>
+                                <span class="quadrant-meaning">Actual High & Pred Normal</span>
+                            </div>
+                            <div class="quadrant-num" id="foodFN">3</div>
+                        </div>
+
+                        <!-- True Negative (TN) -->
+                        <div class="matrix-quadrant tn">
+                            <div class="quadrant-top">
+                                <span class="quadrant-tag">True Negative (TN)</span>
+                                <span class="quadrant-meaning">Actual Normal & Pred Normal</span>
+                            </div>
+                            <div class="quadrant-num" id="foodTN">148</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- MODEL 2: FITNESS WORKOUT & BURN MODEL        -->
+            <!-- ============================================ -->
+            <div class="model-profile-card" id="fitnessModelCard">
+                <div class="model-profile-header">
+                    <div>
+                        <h3>Fitness Activity & Burn Model</h3>
+                        <p>Dataset: <code>random_fitness_dataset.csv</code> (200 records, 40 test samples)</p>
+                    </div>
+                    <span class="algorithm-tag" style="background: var(--color-fitness-bg); color: var(--color-fitness-dark); border-color: #a7f3d0;" id="fitnessAlgoTag">Multivariate Linear Regression</span>
+                </div>
+
+                <!-- 1. PERFORMANCE METRICS SCORES -->
+                <div>
+                    <div class="scores-section-title">
+                        <i class="fa-solid fa-award" style="color: var(--color-fitness-dark);"></i>
+                        <span>Performance Metrics Scores</span>
+                    </div>
+                    <div class="scores-grid">
+                        <div class="score-box">
+                            <div class="score-label">Accuracy</div>
+                            <div class="score-val" id="fitnessAccScore" style="color: #059669;">95.00%</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">Precision</div>
+                            <div class="score-val" id="fitnessPrecScore">0.9688</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">Recall</div>
+                            <div class="score-val" id="fitnessRecScore">0.9688</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">F1-Score</div>
+                            <div class="score-val" id="fitnessF1Score">0.9688</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">R² Score</div>
+                            <div class="score-val" id="fitnessR2Score" style="color: var(--color-fitness-dark);">0.9020</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">Burn MAE</div>
+                            <div class="score-val" id="fitnessBurnMae">49.70 <small style="font-size:12px; font-weight:normal;">kcal</small></div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">Burn RMSE</div>
+                            <div class="score-val" id="fitnessBurnRmse">60.48 <small style="font-size:12px; font-weight:normal;">kcal</small></div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-label">MSE</div>
+                            <div class="score-val" id="fitnessMseScore">3658.20</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. CONFUSION METRICS (TP, TN, FP, FN) -->
+                <div class="confusion-metrics-section">
+                    <div class="scores-section-title">
+                        <i class="fa-solid fa-table-cells" style="color: var(--color-fitness-dark);"></i>
+                        <span>Confusion Metrics (TP, TN, FP, FN at 300 kcal Threshold)</span>
+                    </div>
+
+                    <div class="matrix-2x2-grid">
+                        <!-- True Positive (TP) -->
+                        <div class="matrix-quadrant tp">
+                            <div class="quadrant-top">
+                                <span class="quadrant-tag">True Positive (TP)</span>
+                                <span class="quadrant-meaning">Actual High & Pred High</span>
+                            </div>
+                            <div class="quadrant-num" id="fitnessTP">31</div>
+                        </div>
+
+                        <!-- False Positive (FP) -->
+                        <div class="matrix-quadrant fp">
+                            <div class="quadrant-top">
+                                <span class="quadrant-tag">False Positive (FP)</span>
+                                <span class="quadrant-meaning">Actual Normal & Pred High</span>
+                            </div>
+                            <div class="quadrant-num" id="fitnessFP">1</div>
+                        </div>
+
+                        <!-- False Negative (FN) -->
+                        <div class="matrix-quadrant fn">
+                            <div class="quadrant-top">
+                                <span class="quadrant-tag">False Negative (FN)</span>
+                                <span class="quadrant-meaning">Actual High & Pred Normal</span>
+                            </div>
+                            <div class="quadrant-num" id="fitnessFN">1</div>
+                        </div>
+
+                        <!-- True Negative (TN) -->
+                        <div class="matrix-quadrant tn">
+                            <div class="quadrant-top">
+                                <span class="quadrant-tag">True Negative (TN)</span>
+                                <span class="quadrant-meaning">Actual Normal & Pred Normal</span>
+                            </div>
+                            <div class="quadrant-num" id="fitnessTN">7</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Toast shelf for alerts -->
+    <div class="toast-shelf" id="toastShelf"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-10-14T17:10:42.366827",
+  "food_model": {
+    "name": "Food Calorie Prediction Model",
+    "algorithm": "Multivariate Linear Regression",
+    "dataset": "food_calorie_prediction_dataset.csv",
+    "total_samples": 1500,
+    "test_samples": 300,
+    "confusion_metrics": {
+      "TP": 147,
+      "TN": 148,
+      "FP": 2,
+      "FN": 3,
+      "threshold": "250.0 kcal"
+    },
+    "performance_scores": {
+      "accuracy": 0.9833,
+      "precision": 0.9866,
+      "recall": 0.98,
+      "f1_score": 0.9833,
+      "r2_score": 0.9951,
+      "mae": 5.6374,
+      "rmse": 7.1637,
+      "mse": 51.3184
+    }
+  },
+  "fitness_model": {
+    "name": "Fitness Activity & Burn Model",
+    "algorithm": "Multivariate Linear Regression Pipeline",
+    "dataset": "random_fitness_dataset.csv",
+    "total_samples": 200,
+    "test_samples": 40,
+    "confusion_metrics": {
+      "TP": 31,
+      "TN": 7,
+      "FP": 1,
+      "FN": 1,
+      "threshold": "300.0 kcal"
+    },
+    "performance_scores": {
+      "accuracy": 0.95,
+      "precision": 0.9688,
+      "recall": 0.9688,
+      "f1_score": 0.9688,
+      "r2_score": 0.902,
+      "mae": 49.7,
+      "rmse": 60.48,
+      "mse": 3658.23,
+      "calories_burned_mae": 49.7,
+      "calories_burned_rmse": 60.48
+    }
+  }
+}

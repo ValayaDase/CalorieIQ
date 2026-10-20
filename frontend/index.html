@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalorieIQ | Prediction Dashboard</title>
+    <meta name="description" content="CalorieIQ bright-mode predictive dashboard for food calories and fitness workout burn estimation.">
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- GLOBAL NAVBAR -->
+        <header class="main-navbar">
+            <a href="index.html" class="navbar-brand">
+                <div class="brand-badge-icon">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                </div>
+                <div class="brand-title">Calorie<span class="accent">IQ</span><span class="brand-version">v2.0</span></div>
+            </a>
+
+            <!-- Two Separate Page Navigation Links -->
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link active" id="navDashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Prediction Dashboard</span>
+                </a>
+                <a href="models.html" class="nav-link" id="navModels">
+                    <i class="fa-solid fa-microchip"></i>
+                    <span>Model Information</span>
+                </a>
+            </nav>
+
+            <div class="status-pill" id="backendStatusPill" title="Connection status with Python API">
+                <span class="status-dot"></span>
+                <span id="backendStatusLabel">Backend Online</span>
+            </div>
+        </header>
+
+        <!-- TOP HERO: REAL-TIME ENERGY BALANCE DASHBOARD -->
+        <section class="hero-energy-balance">
+            <span class="section-label"><i class="fa-solid fa-bolt"></i> Metabolic Balance Dashboard</span>
+            <h2>Daily Energy Intake & Workout Expenditure</h2>
+            <p>Compute nutritional calories and exercise expenditure simultaneously to maintain optimal caloric balance.</p>
+
+            <div class="energy-cards-row">
+                <!-- Food Intake Summary -->
+                <div class="energy-stat-card intake">
+                    <div class="stat-icon-wrapper"><i class="fa-solid fa-utensils"></i></div>
+                    <div>
+                        <div class="stat-title">Predicted Intake</div>
+                        <div class="stat-number"><span id="summaryIntake">0</span> <small>kcal</small></div>
+                    </div>
+                </div>
+
+                <!-- Workout Burn Summary -->
+                <div class="energy-stat-card burn">
+                    <div class="stat-icon-wrapper"><i class="fa-solid fa-person-running"></i></div>
+                    <div>
+                        <div class="stat-title">Predicted Burn</div>
+                        <div class="stat-number"><span id="summaryBurn">0</span> <small>kcal</small></div>
+                    </div>
+                </div>
+
+                <!-- Net Difference -->
+                <div class="energy-stat-card net">
+                    <div class="stat-icon-wrapper"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div>
+                        <div class="stat-title">Net Balance (Intake − Burn)</div>
+                        <div class="stat-number"><span id="summaryNet">0</span> <small>kcal</small></div>
+                        <span class="badge-pill neutral" id="netStatusPill">Equilibrium</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Proportion Bar -->
+            <div class="ratio-meter-box">
+                <div class="ratio-meter-header">
+                    <span><i class="fa-solid fa-circle food-indicator"></i> Food Intake: <strong id="ratioIntakePct">50%</strong></span>
+                    <span>Workout Burn: <strong id="ratioBurnPct">50%</strong> <i class="fa-solid fa-circle fitness-indicator"></i></span>
+                </div>
+                <div class="ratio-meter-track">
+                    <div class="ratio-fill-food" id="ratioFillFood" style="width: 50%;"></div>
+                    <div class="ratio-fill-burn" id="ratioFillBurn" style="width: 50%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DUAL PREDICTION FORMS SECTION (SIDE-BY-SIDE) -->
+        <section class="predictors-layout">
+            <!-- ============================================ -->
+            <!-- FORM 1: FOOD CALORIE INTAKE PREDICTOR        -->
+            <!-- ============================================ -->
+            <div class="predictor-card" id="foodCard">
+                <div class="card-top">
+                    <div class="card-top-title">
+                        <div class="category-icon food"><i class="fa-solid fa-bowl-food"></i></div>
+                        <div>
+                            <h3>Food Calorie Predictor</h3>
+                            <div class="card-top-sub">Trained on macronutrient profiles</div>
+                        </div>
+                    </div>
+                    <span class="engine-pill">Engine #1</span>
+                </div>
+
+                <!-- Quick Presets -->
+                <div class="presets-section">
+                    <span class="presets-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Quick Presets</span>
+                    <div class="preset-chip-list" id="foodPresetChips">
+                        <button type="button" class="chip-btn" data-preset="salmon">Salmon & Quinoa</button>
+                        <button type="button" class="chip-btn" data-preset="salad">Avocado Salad</button>
+                        <button type="button" class="chip-btn" data-preset="oats">Oatmeal & Honey</button>
+                        <button type="button" class="chip-btn" data-preset="shake">Protein Shake</button>
+                    </div>
+                </div>
+
+                <form id="foodCalorieForm" class="form-stack">
+                    <div class="row-2">
+                        <div class="field-group">
+                            <label for="foodProtein">
+                                <span>Protein</span>
+                                <small>(4 kcal/g)</small>
+                            </label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-drumstick-bite"></i>
+                                <input type="number" id="foodProtein" step="0.1" min="0" placeholder="e.g. 25.5" required>
+                                <span class="unit-label">g</span>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="foodCarbs">
+                                <span>Carbohydrates</span>
+                                <small>(4 kcal/g)</small>
+                            </label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-wheat-awn"></i>
+                                <input type="number" id="foodCarbs" step="0.1" min="0" placeholder="e.g. 35.0" required>
+                                <span class="unit-label">g</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row-3">
+                        <div class="field-group">
+                            <label for="foodFat">
+                                <span>Total Fat</span>
+                                <small>(9 kcal/g)</small>
+                            </label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-droplet"></i>
+                                <input type="number" id="foodFat" step="0.1" min="0" placeholder="e.g. 12.0" required>
+                                <span class="unit-label">g</span>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="foodFiber">
+                                <span>Fiber</span>
+                            </label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-leaf"></i>
+                                <input type="number" id="foodFiber" step="0.1" min="0" placeholder="e.g. 5.0" value="0.0">
+                                <span class="unit-label">g</span>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="foodSugar">
+                                <span>Sugar</span>
+                            </label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-cubes-stacked"></i>
+                                <input type="number" id="foodSugar" step="0.1" min="0" placeholder="e.g. 8.0" value="0.0">
+                                <span class="unit-label">g</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-action-btn food" id="btnPredictFood">
+                        <span>Predict Food Calories</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <!-- Food Result Card -->
+                <div class="prediction-result-card hidden" id="foodResultCard">
+                    <div class="result-card-header">
+                        <span class="result-title-tag">Estimated Caloric Intake</span>
+                        <span class="badge-pill deficit" id="foodDensityBadge">Moderate</span>
+                    </div>
+                    <div class="result-metric-display">
+                        <span class="big-number" id="foodCaloriesValue">0</span>
+                        <span class="metric-unit-text">kcal</span>
+                    </div>
+
+                    <!-- Macro Distribution Bar -->
+                    <div class="macro-distribution-box">
+                        <div class="macro-title">Macronutrient Caloric Contribution</div>
+                        <div class="macro-bar-track">
+                            <div class="macro-seg protein" id="barProteinPct" style="width: 33%;"></div>
+                            <div class="macro-seg carbs" id="barCarbsPct" style="width: 33%;"></div>
+                            <div class="macro-seg fat" id="barFatPct" style="width: 34%;"></div>
+                        </div>
+                        <div class="macro-stats-row">
+                            <span>Protein: <strong id="legendProtein">0%</strong></span>
+                            <span>Carbs: <strong id="legendCarbs">0%</strong></span>
+                            <span>Fat: <strong id="legendFat">0%</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- FORM 2: FITNESS WORKOUT BURN PREDICTOR       -->
+            <!-- ============================================ -->
+            <div class="predictor-card" id="fitnessCard">
+                <div class="card-top">
+                    <div class="card-top-title">
+                        <div class="category-icon fitness"><i class="fa-solid fa-person-running"></i></div>
+                        <div>
+                            <h3>Fitness Workout Predictor</h3>
+                            <div class="card-top-sub">Trained on Kaggle fitness activity records</div>
+                        </div>
+                    </div>
+                    <span class="engine-pill">Engine #2</span>
+                </div>
+
+                <!-- Quick Presets -->
+                <div class="presets-section">
+                    <span class="presets-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Quick Presets</span>
+                    <div class="preset-chip-list" id="fitnessPresetChips">
+                        <button type="button" class="chip-btn" data-preset="run5k">5K Run</button>
+                        <button type="button" class="chip-btn" data-preset="hiit">HIIT Gym</button>
+                        <button type="button" class="chip-btn" data-preset="cycling">City Cycling</button>
+                        <button type="button" class="chip-btn" data-preset="yoga">Yoga Flow</button>
+                        <button type="button" class="chip-btn" data-preset="strength">Strength Gym</button>
+                    </div>
+                </div>
+
+                <form id="fitnessTrackerForm" class="form-stack">
+                    <!-- Row 1: Exercise Type Dropdown & Workout Duration -->
+                    <div class="row-2">
+                        <div class="field-group">
+                            <label for="fitnessActivityType">
+                                <span>Exercise Type</span>
+                                <small>(Select Activity)</small>
+                            </label>
+                            <div class="input-box select-wrapper">
+                                <i class="fa-solid fa-dumbbell"></i>
+                                <select id="fitnessActivityType" class="dropdown-select" required>
+                                    <option value="Running">🏃 Running / Jogging</option>
+                                    <option value="Yoga">🧘 Yoga & Mobility</option>
+                                    <option value="Walking">🚶 Brisk Walking</option>
+                                    <option value="Cycling">🚴 Cycling / Biking</option>
+                                    <option value="Swimming">🏊 Lap Swimming</option>
+                                    <option value="HIIT">⚡ HIIT Interval</option>
+                                    <option value="Strength Training">🏋️ Strength Training</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="fitnessDuration">
+                                <span>Duration</span>
+                                <small>(Active Time)</small>
+                            </label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-stopwatch"></i>
+                                <input type="number" id="fitnessDuration" min="1" max="300" placeholder="e.g. 45" required>
+                                <span class="unit-label">min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Heart Rate & Body Weight -->
+                    <div class="row-2">
+                        <div class="field-group">
+                            <label for="fitnessHeartRate">Avg Heart Rate</label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-heart-pulse"></i>
+                                <input type="number" id="fitnessHeartRate" min="40" max="220" placeholder="e.g. 135" required>
+                                <span class="unit-label">bpm</span>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="fitnessWeight">Body Weight</label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-weight-scale"></i>
+                                <input type="number" id="fitnessWeight" step="0.1" min="20" max="250" placeholder="e.g. 70.0" required>
+                                <span class="unit-label">kg</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Age & Gender -->
+                    <div class="row-2">
+                        <div class="field-group">
+                            <label for="fitnessAge">Age</label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="number" id="fitnessAge" min="10" max="100" placeholder="e.g. 28" required>
+                                <span class="unit-label">yrs</span>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="fitnessGender">Gender</label>
+                            <div class="input-box select-wrapper">
+                                <i class="fa-solid fa-venus-mars"></i>
+                                <select id="fitnessGender" class="dropdown-select" required>
+                                    <option value="Female">Female</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Daily Steps & Sleep Duration -->
+                    <div class="row-2">
+                        <div class="field-group">
+                            <label for="fitnessSteps">Daily Steps</label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-shoe-prints"></i>
+                                <input type="number" id="fitnessSteps" min="0" placeholder="e.g. 6000" value="5000">
+                                <span class="unit-label">steps</span>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="fitnessSleep">Sleep Duration</label>
+                            <div class="input-box">
+                                <i class="fa-solid fa-moon"></i>
+                                <input type="number" id="fitnessSleep" step="0.1" min="0" max="24" placeholder="e.g. 7.5" value="7.5">
+                                <span class="unit-label">hrs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-action-btn fitness" id="btnPredictFitness">
+                        <span>Predict Workout Burn</span>
+                        <i class="fa-solid fa-person-running"></i>
+                    </button>
+                </form>
+
+                <!-- Fitness Result Card (Accurate kcal!) -->
+                <div class="prediction-result-card hidden" id="fitnessResultCard">
+                    <div class="result-card-header">
+                        <span class="result-title-tag">Workout Burn Expenditure</span>
+                        <span class="badge-pill neutral" id="fitnessIntensityBadge">Moderate Burn</span>
+                    </div>
+                    <div class="dual-metric-flex">
+                        <div class="result-metric-display">
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span class="big-number" id="fitnessCaloriesValue">0</span>
+                                <span class="metric-unit-text">kcal</span>
+                            </div>
+                            <div class="burn-rate-caption" style="font-size: 13px; color: var(--text-muted); margin-top: 4px; display: flex; align-items: center; gap: 5px;">
+                                <i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Burn Rate: <strong id="fitnessBurnRate" style="color: var(--text-heading);">0.0</strong> kcal/min
+                            </div>
+                        </div>
+                        <div class="secondary-pill" id="fitnessDistancePill">
+                            <i class="fa-solid fa-route" style="color: var(--color-fitness);"></i>
+                            <span>Est. Distance: <strong id="fitnessDistanceValue">0.0</strong> km</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SESSION TELEMETRY & PREDICTION HISTORY TABLE -->
+        <section class="history-section-card">
+            <div class="history-header-row">
+                <div>
+                    <h3>Session Prediction History</h3>
+                    <p>Live session log of all nutrition intake and workout expenditure predictions.</p>
+                </div>
+                <button type="button" class="clear-btn" id="btnClearHistory">
+                    <i class="fa-solid fa-trash-can"></i> Clear Log
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="clean-table" id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Category</th>
+                            <th>Inputs</th>
+                            <th>Predicted Energy</th>
+                            <th>Output Details</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <tr class="table-empty-box" id="emptyHistoryRow">
+                            <td colspan="6">
+                                <div class="table-empty-box">
+                                    <i class="fa-solid fa-clipboard-list"></i>
+                                    <p>No predictions recorded yet. Fill out either form above to calculate and log results.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Toast shelf for alerts -->
+    <div class="toast-shelf" id="toastShelf"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
